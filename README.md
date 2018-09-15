@@ -2,11 +2,15 @@
 
 This source plugin for Gatsby will make posts from a Hubspot blog available in GraphQL queries.
 
+## Inspired by version from
+
+"Lewis Robinson <lewisvrobinson@gmail.com>"
+
 ## Installation
 
 ```sh
 # Install the plugin
-yarn add gatsby-source-hubspot
+npm install @cabbiepete/gatsby-source-hubspot
 ```
 
 In `gatsby-config.js`:
@@ -23,6 +27,14 @@ module.exports = {
   ]
 };
 ```
+
+## TODO
+
+- Get topics https://api.hubapi.com/blogs/v3/topics?hapikey=b871c468-42ae-489c-82a1-aa0818027e2b&created__gt=1364424600000
+
+And merge them onto the blog posts based on tag_ids
+
+- Work out a way for "featured" blog posts to be part of featured on home page.
 
 **NOTE:** More information on [Hubspot authentication](https://developers.hubspot.com/docs/methods/auth/oauth-overview). 
 

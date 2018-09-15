@@ -1,9 +1,10 @@
 const fetch = require('node-fetch')
 const queryString = require('query-string')
 const crypto = require('crypto')
+const debug = require('debug')('hubspot-source-plugin');
 
-exports.sourceNodes = ({ actions, createNodeId }, configOptions) => {
-  const { createNode } = actions
+exports.sourceNodes = ({boundActionCreators, createNodeId}, configOptions) => {
+  const { createNode } = boundActionCreators
 
   delete configOptions.plugins
 
@@ -48,6 +49,7 @@ exports.sourceNodes = ({ actions, createNodeId }, configOptions) => {
     .then(response => response.json())
     .then(data => {
       const cleanData = data.objects.map(post => {
+        debug('post keys: ', Object.keys(post));
         return {
           id: post.id,
           title: post.title,
@@ -70,8 +72,8 @@ exports.sourceNodes = ({ actions, createNodeId }, configOptions) => {
                 slug: post.blog_post_author.slug
               }
             : null,
-          feature_image: {
-            url: post.feature_image,
+          featured_image: {
+            url: post.featured_image,
             alt_text: post.featured_image_alt_text
           },
           meta: {
@@ -82,7 +84,12 @@ exports.sourceNodes = ({ actions, createNodeId }, configOptions) => {
           published: post.publish_date,
           updated: post.updated,
           created: post.created,
-          slug: post.slug
+          slug: post.slug,
+          subcategory: post.subcategory,
+          resolved_domain: post.resolved_domain,
+          label: post.label,
+          tag_ids: post.tag_ids,
+          absolute_url: post.absolute_url
         }
       })
       cleanData.forEach(post => {

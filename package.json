@@ -1,8 +1,8 @@
 {
-  "name": "gatsby-source-hubspot",
+  "name": "@cabbiepete/gatsby-source-hubspot",
   "description": "Gatsby source plugin",
-  "repository": "https://github.com/lewisvrobinson/gatsby-source-hubspot.git",
-  "author": "Lewis Robinson <lewisvrobinson@gmail.com>",
+  "repository": "https://github.com/cabbiepete/gatsby-source-hubspot.git",
+  "author": "Peter Simmons <cabbiepete@gmail.com>",
   "keywords": [
     "gatsby",
     "gatsby-plugin",
