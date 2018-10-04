@@ -11,6 +11,28 @@ exports.sourceNodes = ({boundActionCreators, createNodeId}, configOptions) => {
   const topics = []
   const findTopicByID = topicID => topics.find(t => t.id === topicID)
 
+  const processTopic = topic => {
+    const nodeId = createNodeId(`hubspot-topic-${topic.id}`)
+    const nodeContent = JSON.stringify(topic)
+    const nodeContentDigest = crypto
+      .createHash('md5')
+      .update(nodeContent)
+      .digest('hex')
+
+    const nodeData = Object.assign({}, topic, {
+      id: nodeId,
+      parent: null,
+      children: [],
+      internal: {
+        type: `HubspotTopic`,
+        content: nodeContent,
+        contentDigest: nodeContentDigest
+      }
+    })
+
+    return nodeData
+  }
+
   const processPost = post => {
     const nodeId = createNodeId(`hubspot-post-${post.id}`)
     const nodeContent = JSON.stringify(post)
@@ -63,6 +85,8 @@ exports.sourceNodes = ({boundActionCreators, createNodeId}, configOptions) => {
     }))
     .catch(error => console.log(error))
 
+  topics.forEach(topic => createNode(processTopic(topic)))
+
   return fetch(API_ENDPOINT)
     .then(response => response.json())
     .then(data => {
@@ -113,8 +137,7 @@ exports.sourceNodes = ({boundActionCreators, createNodeId}, configOptions) => {
         }
       })
       cleanData.forEach(post => {
-        const nodeData = processPost(post)
-        createNode(nodeData)
+        createNode(processPost(post))
       })
     })
 }
