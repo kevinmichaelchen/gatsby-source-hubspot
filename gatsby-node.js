@@ -8,6 +8,9 @@ exports.sourceNodes = ({boundActionCreators, createNodeId}, configOptions) => {
 
   delete configOptions.plugins
 
+  const topics = []
+  const findTopicByID = topicID => topics.find(t => t.id === topicID)
+
   const processPost = post => {
     const nodeId = createNodeId(`hubspot-post-${post.id}`)
     const nodeContent = JSON.stringify(post)
@@ -45,6 +48,21 @@ exports.sourceNodes = ({boundActionCreators, createNodeId}, configOptions) => {
     `\n  ${API_ENDPOINT}\n`
   )
 
+  const handleErrors = response => {
+    if (!response.ok) {
+      throw new Error(`Received bad response from Hubspot API: ${response.ok}`)
+    }
+    return response
+  }
+
+  fetch(`https://api.hubapi.com/blogs/v3/topics?hapikey=${API_KEY}&limit=1000`)
+    .then(handleErrors)
+    .then(response => response.json())
+    .then(data => data.objects.forEach(topic => {
+      topics.push(topic)
+    }))
+    .catch(error => console.log(error))
+
   return fetch(API_ENDPOINT)
     .then(response => response.json())
     .then(data => {
@@ -72,10 +90,11 @@ exports.sourceNodes = ({boundActionCreators, createNodeId}, configOptions) => {
                 slug: post.blog_post_author.slug
               }
             : null,
-          featured_image: {
-            url: post.featured_image,
-            alt_text: post.featured_image_alt_text
-          },
+          featured_image: post.featured_image,
+          featured_image_alt_text: post.featured_image_alt_text,
+          featured_image_height: post.featured_image_height,
+          featured_image_length: post.featured_image_length,
+          featured_image_width: post.featured_image_width,
           meta: {
             title: post.page_title,
             description: post.meta_description
@@ -89,6 +108,7 @@ exports.sourceNodes = ({boundActionCreators, createNodeId}, configOptions) => {
           resolved_domain: post.resolved_domain,
           label: post.label,
           tag_ids: post.tag_ids,
+          topic_ids: post.topic_ids.map(findTopicByID).filter(id => id !== undefined),
           absolute_url: post.absolute_url
         }
       })
