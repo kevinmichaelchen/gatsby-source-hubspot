@@ -4,6 +4,7 @@ const crypto = require('crypto')
 const debug = require('debug')('hubspot-source-plugin');
 
 exports.sourceNodes = ({boundActionCreators, createNodeId}, configOptions) => {
+  console.log('EXECUTING HUBSPOT PLUGIN')
   const { createNode } = boundActionCreators
 
   delete configOptions.plugins
