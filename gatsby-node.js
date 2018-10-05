@@ -87,6 +87,7 @@ exports.sourceNodes = ({boundActionCreators, createNodeId}, configOptions) => {
     .catch(error => console.log(error))
 
   topics.forEach(topic => createNode(processTopic(topic)))
+  console.log('Found', topics.length, 'topics')
 
   return fetch(API_ENDPOINT)
     .then(response => response.json())
@@ -137,6 +138,7 @@ exports.sourceNodes = ({boundActionCreators, createNodeId}, configOptions) => {
           absolute_url: post.absolute_url
         }
       })
+      console.log('Found', cleanData.length, 'posts')
       cleanData.forEach(post => {
         createNode(processPost(post))
       })
