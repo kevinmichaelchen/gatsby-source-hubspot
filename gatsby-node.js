@@ -95,6 +95,7 @@ exports.sourceNodes = ({boundActionCreators, createNodeId}, configOptions) => {
     .then(data => {
       const cleanData = data.objects.map(post => {
         debug('post keys: ', Object.keys(post));
+        const topic_ids_str = (post.topic_ids || []).map(id => id + "")
         return {
           id: post.id,
           title: post.title,
@@ -135,8 +136,9 @@ exports.sourceNodes = ({boundActionCreators, createNodeId}, configOptions) => {
           resolved_domain: post.resolved_domain,
           label: post.label,
           tag_ids: post.tag_ids,
-          topic_ids: (post.topic_ids || []).map(id => `${id}`),
-          topics: post.topic_ids.map(findTopicByID).filter(id => id !== undefined),
+          topic_ids: (post.topic_ids || []).map(id => (typeof id) === 'string' ? parseInt(id, 10) : id),
+          topic_ids_str: topic_ids_str,
+          topics: (post.topic_ids || []).map(findTopicByID).filter(id => id !== undefined),
           absolute_url: post.absolute_url
         }
       })
