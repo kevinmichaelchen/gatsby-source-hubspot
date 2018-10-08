@@ -96,6 +96,7 @@ exports.sourceNodes = ({boundActionCreators, createNodeId}, configOptions) => {
       const cleanData = data.objects.map(post => {
         debug('post keys: ', Object.keys(post));
         const topic_ids_str = (post.topic_ids || []).map(id => id + "")
+        console.log('topic_ids_str =', topic_ids_str)
         return {
           id: post.id,
           title: post.title,
