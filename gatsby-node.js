@@ -82,9 +82,13 @@ exports.sourceNodes = ({boundActionCreators, createNodeId}, configOptions) => {
     .then(handleErrors)
     .then(response => response.json())
     .then(data => data.objects.forEach(topic => {
+      console.log('Found topic:', topic)
       topics.push(topic)
     }))
-    .catch(error => console.log(error))
+    .catch(error => {
+      console.log('Gatsby Hubspot Plugin encountered error...')
+      console.log(error)
+    })
 
   return fetch(API_ENDPOINT)
     .then(response => response.json())
