@@ -10,7 +10,8 @@ exports.sourceNodes = ({boundActionCreators, createNodeId}, configOptions) => {
   delete configOptions.plugins
 
   const topics = []
-  const findTopicByID = topicID => topics.find(t => t.id === topicID)
+  // id is a string now, so make sure we combine triple equals and string interpolation
+  const findTopicByID = topicID => topics.find(t => `${t.id}` === `${topicID}`)
 
   const processTopic = topic => {
     const nodeId = createNodeId(`hubspot-topic-${topic.id}`)
