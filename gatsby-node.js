@@ -83,7 +83,7 @@ exports.sourceNodes = ({boundActionCreators, createNodeId}, configOptions) => {
     .then(response => response.json())
     .then(data => data.objects.forEach(topic => {
       console.log('Found topic:', topic.name)
-      topics.push({...topic, topicID: topic.id})
+      topics.push({...topic, hubspotID: topic.id})
     }))
     .catch(error => {
       console.log('Gatsby Hubspot Plugin encountered error...')
@@ -97,7 +97,7 @@ exports.sourceNodes = ({boundActionCreators, createNodeId}, configOptions) => {
         debug('post keys: ', Object.keys(post));
         return {
           id: post.id,
-          postID: post.id,
+          hubspotID: post.id,
           title: post.title,
           body: post.post_body,
           state: post.state,
