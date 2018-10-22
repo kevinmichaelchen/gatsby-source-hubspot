@@ -83,7 +83,7 @@ exports.sourceNodes = ({boundActionCreators, createNodeId}, configOptions) => {
     .then(response => response.json())
     .then(data => data.objects.forEach(topic => {
       console.log('Found topic:', topic.name)
-      topics.push({...topic, hubspotID: topic.id})
+      topics.push({...topic, id: topic.id + "", hubspotID: topic.id})
     }))
     .catch(error => {
       console.log('Gatsby Hubspot Plugin encountered error...')
@@ -96,14 +96,15 @@ exports.sourceNodes = ({boundActionCreators, createNodeId}, configOptions) => {
       const cleanData = data.objects.map(post => {
         debug('post keys: ', Object.keys(post));
         return {
-          id: post.id,
+          id: post.id + "",
           hubspotID: post.id,
           title: post.title,
           body: post.post_body,
           state: post.state,
           author: post.blog_post_author
             ? {
-                id: post.blog_post_author.id,
+                id: post.blog_post_author.id + "",
+                hubspotID: post.blog_post_author.id,
                 avatar: post.blog_post_author.avatar.avatar,
                 name: post.blog_post_author.display_name,
                 full_name: post.blog_post_author.full_name,
@@ -136,8 +137,6 @@ exports.sourceNodes = ({boundActionCreators, createNodeId}, configOptions) => {
           resolved_domain: post.resolved_domain,
           label: post.label,
           tag_ids: post.tag_ids,
-          topic_ids: (post.topic_ids || []).map(id => (typeof id) === 'string' ? parseInt(id, 10) : id),
-          topic_ids_str: (post.topic_ids || []).map(id => id + ""),
           topics: (post.topic_ids || []).map(findTopicByID).filter(id => id !== undefined),
           absolute_url: post.absolute_url
         }
