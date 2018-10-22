@@ -13,7 +13,9 @@ exports.sourceNodes = ({boundActionCreators, createNodeId}, configOptions) => {
   // id is a string now, so make sure we combine triple equals and string interpolation
   const findTopicByID = topicID => {
     console.log('typeof topicID:', (typeof topicID))
-    return topics.find(t => `${t.id}` === `${topicID}`)
+    let result = topics.find(t => `${t.id}` === `${topicID}`)
+    console.log('RESULT =', result)
+    return result
   }
 
   const processTopic = topic => {
