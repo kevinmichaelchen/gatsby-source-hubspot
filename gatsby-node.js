@@ -138,7 +138,11 @@ exports.sourceNodes = ({boundActionCreators, createNodeId}, configOptions) => {
           resolved_domain: post.resolved_domain,
           label: post.label,
           tag_ids: post.tag_ids,
-          topics: (post.topic_ids || []).map(findTopicByID).filter(id => id !== undefined),
+          topics: (post.topic_ids || [])
+            // stringify ids first
+            .map(id => id + "")
+            .map(findTopicByID)
+            .filter(id => !!id),
           absolute_url: post.absolute_url
         }
       })
